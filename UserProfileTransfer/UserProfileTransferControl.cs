@@ -14,11 +14,11 @@ using McTools.Xrm.Connection;
 
 namespace UserProfileTransfer
 {
-    public partial class MyPluginControl : PluginControlBase
+    public partial class UserProfileTransferControl : PluginControlBase
     {
         private Settings mySettings;
 
-        public MyPluginControl()
+        public UserProfileTransferControl()
         {
             InitializeComponent();
         }
