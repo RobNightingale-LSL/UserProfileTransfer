@@ -132,7 +132,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MyPlugin.cs" />
+    <Compile Include="UserProfileTransfer.cs" />
     <Compile Include="MyPluginControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

@@ -21,7 +21,7 @@ namespace UserProfileTransfer
         ExportMetadata("BackgroundColor", "Lavender"),
         ExportMetadata("PrimaryFontColor", "Black"),
         ExportMetadata("SecondaryFontColor", "Gray")]
-    public class MyPlugin : PluginBase
+    public class UserProfileTransfer : PluginBase
     {
         public override IXrmToolBoxPluginControl GetControl()
         {
@@ -31,7 +31,7 @@ namespace UserProfileTransfer
         /// <summary>
         /// Constructor 
         /// </summary>
-        public MyPlugin()
+        public UserProfileTransfer()
         {
             // If you have external assemblies that you need to load, uncomment the following to 
             // hook into the event that will fire when an Assembly fails to resolve
