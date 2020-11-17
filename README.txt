@@ -1,4 +1,2 @@
-# USer Profile for XTMToolBox
+# User Profile for XTMToolBox
 XrmToolBox tool to transfer user profiles between environments.
-
-
