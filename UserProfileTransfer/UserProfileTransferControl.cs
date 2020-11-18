@@ -11,6 +11,12 @@ using XrmToolBox.Extensibility;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Sdk;
 using McTools.Xrm.Connection;
+using Microsoft.Xrm.Tooling.Connector;
+using System.IO;
+using UserProfileTransfer.Helpers;
+using Newtonsoft.Json;
+using UserProfileTransfer.Models;
+using System.Reflection;
 
 namespace UserProfileTransfer
 {
@@ -101,6 +107,72 @@ namespace UserProfileTransfer
             {
                 mySettings.LastUsedOrganizationWebappUrl = detail.WebApplicationUrl;
                 LogInfo("Connection has changed to: {0}", detail.WebApplicationUrl);
+            }
+        }
+
+        private void btnImportUserProfiles_Click(object sender, EventArgs e)
+        {
+            Assembly currAssembly = Assembly.GetExecutingAssembly();
+
+            try
+            {
+                CrmServiceClient crmServiceClient = (CrmServiceClient)Service;
+
+                var env = crmServiceClient.CrmConnectOrgUriActual.Host.Substring(0, crmServiceClient.CrmConnectOrgUriActual.Host.IndexOf('.'));
+                var fileName = Directory.GetCurrentDirectory() + @"\Export\" + env + "_AssignRolesToUsers.json";
+                
+                if (crmServiceClient.CrmConnectOrgUriActual.ToString().Contains(env))
+                {
+                    var repo = new SecurityManager(crmServiceClient);
+
+                    //change to go up 3 folders in deploymentpackage
+                    using (StreamReader file = File.OpenText(fileName))
+                    {
+                        JsonSerializer serializer = new JsonSerializer();
+                        UserSecurityProfileList jsonConfig = (UserSecurityProfileList)serializer.Deserialize(file, typeof(UserSecurityProfileList));
+
+                        foreach (UserSecurityProfile payload in jsonConfig)
+                        {
+                            repo.ConfigureUser(payload);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failure to process Team security roles: {ex.Message}");
+            }
+        }
+
+        private void btnExportUserProfiles_Click(object sender, EventArgs e)
+        {
+            Assembly currAssembly = Assembly.GetExecutingAssembly();
+
+            try
+            {
+                CrmServiceClient crmServiceClient = (CrmServiceClient)Service;
+                
+                var env = crmServiceClient.CrmConnectOrgUriActual.Host.Substring(0, crmServiceClient.CrmConnectOrgUriActual.Host.IndexOf('.'));
+                var fileName = Directory.GetCurrentDirectory() + @"\Export\" + env + "_AssignRolesToUsers.json";
+
+                if (crmServiceClient.CrmConnectOrgUriActual.ToString().Contains(env))
+                {
+                    var repo = new SecurityManager(crmServiceClient);
+                    var jsonPayload = repo.ExportUserSecurity();
+                    if (File.Exists(fileName))
+                    {
+                        File.Delete(fileName);
+                    }
+                    using (var tw = new StreamWriter(fileName, true))
+                    {
+                        tw.WriteLine(jsonPayload);
+                        tw.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failure to process Team security roles: {ex.Message}");
             }
         }
     }
