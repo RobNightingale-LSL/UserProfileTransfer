@@ -132,6 +132,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\SecurityManager.cs" />
+    <Compile Include="Models\Models.cs" />
     <Compile Include="UserProfileTransfer.cs" />
     <Compile Include="UserProfileTransferControl.cs">
       <SubType>UserControl</SubType>
@@ -146,6 +148,12 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="UserProfileTransferControl.resx">
+      <DependentUpon>UserProfileTransferControl.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>IF $(ConfigurationName) == Debug (
